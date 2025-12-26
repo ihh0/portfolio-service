@@ -130,6 +130,6 @@ npm run start
 - Redis로 refresh 세션 관리 및 통계 캐싱
 
 ## 한계와 개선 계획
-- Postman 컬렉션 미작성 → 추가 예정
+- Postman 컬렉션 미완성 → 추가 예정
 - 마이그레이션 자동화 스크립트 추가 예정
 - Redis 장애 시 인증 기능 복구 전략 개선 예정
