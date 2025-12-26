@@ -1,12 +1,12 @@
 # Portfolio Service
 
 ## 프로젝트 개요
-포트폴리오 관리 서비스 API입니다. 사용자/프로젝트/스킬/경력 데이터를 관리하고, JWT 기반 인증·인가 및 소셜 로그인(GitHub, Firebase)을 제공합니다.
+포트폴리오 관리 서비스 API입니다. 사용자/프로젝트/기술/경력 데이터를 관리하고, JWT 기반 인증·인가 및 소셜 로그인(GitHub, Firebase)을 제공합니다.
 
 주요 기능
 - 로컬 회원가입/로그인, 토큰 갱신/로그아웃
 - GitHub OAuth, Firebase 인증
-- 사용자/프로젝트/스킬/경력 CRUD
+- 사용자/프로젝트/기술/경력 CRUD
 - 프로젝트 좋아요, 관리자 통계
 
 ## 실행 방법
@@ -111,10 +111,10 @@ npm run start
 | DELETE | /projects/{id} | 프로젝트 삭제 |
 | POST | /projects/{id}/likes | 프로젝트 좋아요 |
 | DELETE | /projects/{id}/likes | 프로젝트 좋아요 취소 |
-| GET | /skills | 스킬 목록 |
-| POST | /skills | 스킬 생성 |
-| PATCH | /skills/{id} | 스킬 수정 |
-| DELETE | /skills/{id} | 스킬 삭제 |
+| GET | /skills | 기술 목록 |
+| POST | /skills | 기술 생성 |
+| PATCH | /skills/{id} | 기술 수정 |
+| DELETE | /skills/{id} | 기술 삭제 |
 | GET | /users/{uid}/experiences | 경력 목록 |
 | GET | /experiences/{id} | 경력 상세 |
 | POST | /users/{uid}/experiences | 경력 생성 |

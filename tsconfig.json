@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+      /* 언어/타겟 */
+      "target": "ES2020",
+      "lib": ["ES2020"],
+      "module": "CommonJS",
+      "moduleResolution": "Node",
+      "resolveJsonModule": true,
+  
+      /* 출력 */
+      "outDir": "./dist",
+      "sourceMap": true,
+  
+      /* TypeScript 품질 */
+      "strict": true,
+      "noImplicitAny": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "skipLibCheck": true,
+  
+      /* Node/Express 편의 */
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+  
+      /* TypeORM(Decorator) 필수 옵션 */
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true
+    },
+    "include": ["src/**/*.ts", "tests/**/*.ts", "seed/**/*.ts"],
+    "exclude": ["node_modules", "dist"]
+}  

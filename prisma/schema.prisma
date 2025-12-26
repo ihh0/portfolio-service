@@ -1,0 +1,172 @@
+// prisma/schema.prisma
+// - 현재 TypeORM entity 정의를 기준으로 Prisma 모델을 작성한다.
+// - 목적: Prisma Migrate로 DB 스키마/마이그레이션 이력 관리
+// - 런타임 ORM(TypeORM)은 당장 유지해도 무방(제출 요건 충족용)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ROLE_USER
+  ROLE_ADMIN
+}
+
+enum ContentFormat {
+  MARKDOWN
+  PLAIN_TEXT
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERN
+  FREELANCE
+  OTHER
+}
+
+enum AuthProvider {
+  github
+  firebase
+}
+
+model User {
+  uid            String   @id @db.VarChar(36)
+  login_id       String   @unique @db.VarChar(50)
+  password_hash  String   @db.VarChar(100)
+  display_name   String   @db.VarChar(50)
+  email          String?  @db.VarChar(255)
+  phone          String?  @db.VarChar(30)
+
+  is_email_public Boolean @default(true)
+  is_phone_public Boolean @default(true)
+  is_featured     Boolean @default(false)
+
+  role           UserRole @default(ROLE_USER)
+
+  created_at     DateTime @default(now()) @db.DateTime(0)
+  updated_at     DateTime @updatedAt @db.DateTime(0)
+  deleted_at     DateTime? @db.DateTime(0)
+
+  projects       Project[]
+  experiences    Experience[]
+  projectLikes   ProjectLike[]
+  authIdentities AuthIdentity[]
+
+  @@index([display_name])
+  @@index([deleted_at])
+  @@map("user")
+}
+
+model Project {
+  id                Int           @id @default(autoincrement()) @db.Int
+  title             String        @db.VarChar(150)
+  summary           String?       @db.VarChar(300)
+  content           String?       @db.LongText
+  content_format    ContentFormat @default(MARKDOWN)
+  thumbnail_asset_id Int?         @db.Int
+
+  is_public         Boolean       @default(true)
+  start_date        DateTime?     @db.Date
+  end_date          DateTime?     @db.Date
+
+  likes_count       Int           @default(0) @db.Int
+
+  created_at        DateTime      @default(now()) @db.DateTime(0)
+  updated_at        DateTime      @updatedAt @db.DateTime(0)
+  deleted_at        DateTime?     @db.DateTime(0)
+
+  user_uid          String        @db.VarChar(36)
+  user              User          @relation(fields: [user_uid], references: [uid])
+
+  projectSkills     ProjectSkill[]
+  projectLikes      ProjectLike[]
+
+  @@index([title])
+  @@index([likes_count])
+  @@index([user_uid])
+  @@index([deleted_at])
+  @@map("project")
+}
+
+model Skill {
+  id         Int      @id @default(autoincrement()) @db.Int
+  name       String   @unique @db.VarChar(50)
+
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @updatedAt @db.DateTime(0)
+  deleted_at DateTime? @db.DateTime(0)
+
+  projectSkills ProjectSkill[]
+
+  @@index([deleted_at])
+  @@map("skill")
+}
+
+model Experience {
+  id              Int            @id @default(autoincrement()) @db.Int
+
+  user_uid        String         @db.VarChar(36)
+  user            User           @relation(fields: [user_uid], references: [uid])
+
+  company         String         @db.VarChar(100)
+  position        String         @db.VarChar(100)
+  employment_type EmploymentType @default(FULL_TIME)
+
+  start_date      DateTime       @db.Date
+  end_date        DateTime?      @db.Date
+  description     String?        @db.Text
+
+  created_at      DateTime       @default(now()) @db.DateTime(0)
+  updated_at      DateTime       @updatedAt @db.DateTime(0)
+  deleted_at      DateTime?      @db.DateTime(0)
+
+  @@index([user_uid])
+  @@index([deleted_at])
+  @@map("experience")
+}
+
+model ProjectSkill {
+  project_id Int @db.Int
+  skill_id   Int @db.Int
+
+  project    Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  skill      Skill   @relation(fields: [skill_id], references: [id], onDelete: Cascade)
+
+  @@id([project_id, skill_id])
+  @@map("project_skill")
+}
+
+model ProjectLike {
+  project_id Int    @db.Int
+  user_uid   String @db.VarChar(36)
+
+  project    Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user       User    @relation(fields: [user_uid], references: [uid], onDelete: Cascade)
+
+  @@id([project_id, user_uid])
+  @@index([user_uid])
+  @@map("project_like")
+}
+
+model AuthIdentity {
+  id               String       @id @db.VarChar(64)
+  provider         AuthProvider
+  provider_user_id String       @db.VarChar(100)
+  user_uid         String       @db.VarChar(36)
+
+  email            String?      @db.VarChar(255)
+  username         String?      @db.VarChar(50)
+
+  user             User         @relation(fields: [user_uid], references: [uid], onDelete: Cascade)
+
+  @@unique([provider, provider_user_id])
+  @@index([user_uid])
+  @@map("auth_identity")
+}
