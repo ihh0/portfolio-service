@@ -15,7 +15,7 @@ FROM node:20-bullseye-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json package-lock.json ./
-COPY --from=deps /app/node_modules ./node_modules
+RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
 EXPOSE 8080
 CMD ["node", "dist/server.js"]
