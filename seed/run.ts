@@ -23,11 +23,12 @@ async function main() {
   const projectRepo = AppDataSource.getRepository(Project);
   const psRepo = AppDataSource.getRepository(ProjectSkill);
   const expRepo = AppDataSource.getRepository(Experience);
+  const now = new Date();
 
   // 1) skills 30개
   const skills: Skill[] = [];
   for (let i = 1; i <= 30; i++) {
-    skills.push(skillRepo.create({ name: `skill_${i}` }));
+    skills.push(skillRepo.create({ name: `skill_${i}`, created_at: now, updated_at: now }));
   }
   await skillRepo.save(skills);
 
@@ -45,6 +46,8 @@ async function main() {
       is_featured: false,
       is_email_public: true,
       is_phone_public: true,
+      created_at: now,
+      updated_at: now,
     })
   );
 
@@ -59,6 +62,8 @@ async function main() {
         is_featured: i <= 5,
         is_email_public: true,
         is_phone_public: true,
+        created_at: now,
+        updated_at: now,
       })
     );
   }
@@ -76,6 +81,8 @@ async function main() {
         content: `Content ${i}`,
         is_public: i % 4 !== 0, // 일부 비공개
         likes_count: 0,
+        created_at: now,
+        updated_at: now,
       })
     );
   }
@@ -105,6 +112,8 @@ async function main() {
         start_date: "2023-01-01",
         end_date: null,
         description: "Seed experience",
+        created_at: now,
+        updated_at: now,
       })
     );
   }
