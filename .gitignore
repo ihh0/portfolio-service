@@ -25,3 +25,4 @@ coverage/
 
 # misc
 *.swp
+ecosystem.config.js
