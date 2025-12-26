@@ -9,15 +9,11 @@ function shouldLog(level: "debug" | "info" | "warn" | "error") {
   return order[level] >= current;
 }
 
-function nowMs() {
-  return Date.now();
-}
-
 /**
  * requestLogger
  * - 요청 로그는 비활성화한다.
  */
-export function requestLogger(req: Request, res: Response, next: NextFunction) {
+export function requestLogger(_req: Request, _res: Response, next: NextFunction) {
   next();
 }
 
