@@ -65,6 +65,10 @@ app.use(projectsRoutes);
 app.use(skillsRoutes);
 app.use(experiencesRoutes);
 app.use(adminRoutes);
+app.use("/docs", (_req, res, next) => {
+  res.setHeader("Content-Security-Policy", "");
+  next();
+});
 app.use("/docs", createSwaggerRouter());
 
 // 404 → error
